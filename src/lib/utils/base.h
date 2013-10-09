@@ -156,6 +156,11 @@ using KPoco::SharedPtr;
 using Poco::SharedPtr;
 #endif
 
+//Several functions became deprecated as of glib 2.32, such as g_thread_create and g_thread_init
+#if (GLIB_MAJOR_VERSION == 2) && (GLIB_MINOR_VERSION < 32)
+#define USE_PRE_2_32_GLIB 1
+#endif
+
 namespace TideUtils
 {
   class KComponent;

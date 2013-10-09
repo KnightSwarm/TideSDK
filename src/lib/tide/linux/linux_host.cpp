@@ -4,7 +4,7 @@
 * Copyright (c) 2012 Software in the Public Interest Inc (SPI)
 * Copyright (c) 2012 David Pratt
 * Copyright (c) 2012 Mital Vora
-* 
+*
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
@@ -19,7 +19,7 @@
 *
 ***
 * Copyright (c) 2008-2012 Appcelerator Inc.
-* 
+*
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
@@ -54,23 +54,25 @@ namespace tide
 {
     static pthread_t mainThread = 0;
 
-    static gboolean MainThreadJobCallback(gpointer data)
+    static gboolean MainThreadJobCallback (gpointer data)
     {
-        static_cast<Host*>(data)->RunMainThreadJobs();
+        static_cast<Host*> (data)->RunMainThreadJobs();
         return TRUE;
     }
 
-    void Host::Initialize(int argc, const char *argv[])
+    void Host::Initialize (int argc, const char *argv[])
     {
-        gtk_init(&argc, (char***) &argv);
+        gtk_init (&argc, (char***) &argv);
 
+        #ifdef USE_PRE_2_32_GLIB
         if (!g_thread_supported())
-            g_thread_init(NULL);
+            g_thread_init (NULL);
+        #endif
 
         mainThread = pthread_self();
 
         // Initialize gnutls for multi-threaded usage.
-        gcry_control(GCRYCTL_SET_THREAD_CBS, &gcry_threads_pthread);
+        gcry_control (GCRYCTL_SET_THREAD_CBS, &gcry_threads_pthread);
         gnutls_global_init();
     }
 
@@ -80,16 +82,16 @@ namespace tide
 
     void Host::WaitForDebugger()
     {
-        printf("Waiting for debugger (Press Any Key to Continue pid=%i)...\n", getpid());
+        printf ("Waiting for debugger (Press Any Key to Continue pid=%i)...\n", getpid());
         getchar();
     }
 
     bool Host::RunLoop()
     {
-        string origPath(EnvironmentUtils::Get("KR_ORIG_LD_LIBRARY_PATH"));
-        EnvironmentUtils::Set("LD_LIBRARY_PATH", origPath);
+        string origPath (EnvironmentUtils::Get ("KR_ORIG_LD_LIBRARY_PATH"));
+        EnvironmentUtils::Set ("LD_LIBRARY_PATH", origPath);
 
-        g_timeout_add(250, &MainThreadJobCallback, this);
+        g_timeout_add (250, &MainThreadJobCallback, this);
         gtk_main();
         return false;
     }
@@ -98,7 +100,7 @@ namespace tide
     {
     }
 
-    void Host::ExitImpl(int exitCode)
+    void Host::ExitImpl (int exitCode)
     {
         // Only call this if gtk_main is running. If called when the gtk_main
         // is not running, it will cause an assertion failure.
@@ -111,29 +113,35 @@ namespace tide
     }
 
 
-    Module* Host::CreateModule(std::string& path)
+    Module* Host::CreateModule (std::string& path)
     {
-        void* handle = dlopen(path.c_str(), RTLD_LAZY | RTLD_GLOBAL);
+        void* handle = dlopen (path.c_str(), RTLD_LAZY | RTLD_GLOBAL);
         if (!handle)
         {
-            throw ValueException::FromFormat("Error loading module (%s): %s\n", path.c_str(), dlerror());
+            throw ValueException::FromFormat ("Error loading module (%s): %s\n", path.c_str(), dlerror());
             return 0;
         }
 
         // get the module factory
-        ModuleCreator* create = (ModuleCreator*) dlsym(handle, "CreateModule");
+        ModuleCreator* create = (ModuleCreator*) dlsym (handle, "CreateModule");
         if (!create)
         {
-            throw ValueException::FromFormat(
+            throw ValueException::FromFormat (
                 "Cannot load CreateModule symbol from module (%s): %s\n",
                 path.c_str(), dlerror());
         }
 
-        return create(this, FileUtils::GetDirectory(path).c_str());
+        return create (this, FileUtils::GetDirectory (path).c_str());
     }
 
     bool Host::IsMainThread()
     {
-        return pthread_equal(mainThread, pthread_self());
+        return pthread_equal (mainThread, pthread_self());
     }
 }
+
+
+
+
+
+

@@ -551,11 +551,18 @@ void Installer::StartDownloading()
         this->CreateProgressView();
         this->SetStage(DOWNLOADING);
 
+		#ifdef USE_PRE_2_32_GLIB
         if (!g_thread_supported())
             g_thread_init(NULL);
 
-        this->download_thread =
-            g_thread_create(&download_thread_f, this, TRUE, NULL);
+		this->download_thread =
+				g_thread_create(&download_thread_f, this, TRUE, NULL);
+		#else
+		//"StartDownloading" is the thread name, feel free to change.
+		//Apparently potentially useful while running within a debugger.
+		this->download_thread =
+			g_thread_new("StartDownloading", &download_thread_f, this);
+		#endif
 
         if (this->download_thread == NULL)
             g_warning("Can't create download thread!\n");
@@ -646,9 +653,24 @@ void Installer::StartInstalling()
         // files now.
         Job::ShutdownDownloader();
 
-        if(!g_thread_create(&install_thread_f, this, FALSE, NULL))
-            g_warning("Can't create install thread!\n");
 
+		#ifdef USE_PRE_2_32_GLIB
+		if(!g_thread_create(&install_thread_f, this, FALSE, NULL))
+			g_warning("Can't create install thread!\n");
+		#else
+		GThread *installThread = g_thread_new("StartInstalling", &install_thread_f, this);
+		//"StartDownloading" is the thread name, feel free to change.
+		//Apparently potentially useful while running within a debugger.
+		if(!installThread)
+			g_warning("Can't create install thread!\n");
+		else
+		{
+			//Unref from this thread, the install thread will keep
+			//its own ref until it terminates.
+			g_thread_unref(installThread);
+		}
+		#endif
+		
         this->SetStage(INSTALLING);
     }
 }

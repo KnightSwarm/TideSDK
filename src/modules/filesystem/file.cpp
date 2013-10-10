@@ -50,6 +50,7 @@ using namespace TideUtils;
 #endif
 
 #ifdef OS_LINUX
+#include <unistd.h> //Needed for symlink
 #include <sys/statvfs.h>
 #endif
 

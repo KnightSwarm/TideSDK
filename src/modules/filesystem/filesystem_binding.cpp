@@ -52,6 +52,7 @@ using namespace TideUtils;
 #include <shlobj.h>
 #include <process.h>
 #elif OS_LINUX
+#include <unistd.h> //Needed for getuid()
 #include <sys/types.h>
 #include <pwd.h>
 #endif

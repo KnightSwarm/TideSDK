@@ -33,6 +33,7 @@
 **/
 
 #include "posix_pipe.h"
+#include <unistd.h> //Needed for pipe and write
 
 namespace ti
 {

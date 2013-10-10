@@ -676,13 +676,13 @@ namespace ti
 
         Bounds b = userWindow->GetBounds();
         if (width != -1)
-            b.width = (double) width;
+            b.width = static_cast<double>(width);
         if (height != -1)
-            b.height = (double) height;
+            b.height = static_cast<double>(height);
         if (x != -1)
-            b.x = (double) x;
+            b.x = static_cast<double>(x);
         if (y != -1)
-            b.y = (double) y;
+            b.y = static_cast<double>(y);
 
         userWindow->SetBounds(b);
     }
@@ -1034,7 +1034,13 @@ namespace ti
 
     Bounds GtkUserWindow::GetBoundsImpl()
     {
-        Bounds b = {targetX, targetY, targetWidth, targetHeight };
+        Bounds b = 
+        {
+            static_cast<double>(targetX), 
+            static_cast<double>(targetY), 
+            static_cast<double>(targetWidth), 
+            static_cast<double>(targetHeight)
+        };
         return b;
     }
 

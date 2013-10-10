@@ -145,6 +145,9 @@ namespace ti
         // detect a GDK window resize, these values will also be
         // updated, so they will be an accurate representation of
         // the window size.
+        // Note: double is used elsewhere for values corresponding to these
+        // and it's not necessarily safe to convert from int to double.
+        // Likely not an issue for relatively small values like what we can expect to see here.
         int targetWidth;
         int targetHeight;
         int targetX;

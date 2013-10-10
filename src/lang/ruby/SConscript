@@ -49,16 +49,19 @@ if build.is_osx():
 
 
 elif build.is_linux():
-    env.Append(CPPPATH=[
-        '/usr/lib/ruby/1.8/i386-linux',
-        '/usr/lib/ruby/1.8/i486-linux',
-        '/usr/lib/ruby/1.8/i686-linux',
-        '/usr/lib/ruby/1.8/x86_64-linux',
-        '/usr/lib/ruby/1.8/powerpc-linux',
+    if path.exists('/usr/lib/ruby/1.8'):
+        env.Append(CPPPATH=[
+	    '/usr/lib/ruby/1.8/i386-linux',
+	    '/usr/lib/ruby/1.8/i486-linux',
+	    '/usr/lib/ruby/1.8/i686-linux',
+	    '/usr/lib/ruby/1.8/x86_64-linux',
+	    '/usr/lib/ruby/1.8/powerpc-linux',
         build.tide_include_dir])
 
     if path.exists('/usr/lib/libruby1.8.so'):
         env.Append(LIBS=['ruby1.8'])
+    elif path.exists('/usr/lib/libruby18.so'):
+        env.Append(LIBS=['ruby18'])
     else:
         env.Append(LIBS=['ruby'])
 

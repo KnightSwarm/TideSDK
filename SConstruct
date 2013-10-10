@@ -75,7 +75,7 @@ if debug:
 else:
     build.env.Append(CPPDEFINES = ('NDEBUG', 1 ))
     if not build.is_win32():
-        build.env.Append(CPPFLAGS = ['-O9']) # max optimizations
+        build.env.Append(CPPFLAGS = ['-O2']) # max optimizations #Oh, no you don't.
 if build.is_win32():
     build.env.Append(CCFLAGS=['/EHsc', '/GR', '/MD'])
     build.env.Append(LINKFLAGS=['/DEBUG', '/PDB:${TARGET}.pdb'])

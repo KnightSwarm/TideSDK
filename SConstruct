@@ -81,7 +81,6 @@ build.env.Append(CPPPATH=[
 # debug build flags
 debug = ARGUMENTS.get('debug', 0)
 lite  = ARGUMENTS.get('lite', 0)
-#Testing -IIC
 noruby  = ARGUMENTS.get('no-ruby', 0)
 nopython  = ARGUMENTS.get('no-python', 0)
 nophp  = ARGUMENTS.get('no-php', 0)

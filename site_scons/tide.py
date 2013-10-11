@@ -138,6 +138,12 @@ class BuildConfig(object):
         if ARGUMENTS.get('lite'):
             self.tidelite = True
             self.env.Append(CPPDEFINES='TIDE_LITE')
+        if ARGUMENTS.get('no-ruby'):
+            self.noruby = True
+        if ARGUMENTS.get('no-python'):
+            self.nopython = True
+        if ARGUMENTS.get('no-php'):
+            self.nophp = True
         
         self.init_os_arch()
         self.build_targets = []  # targets needed before packaging & distribution can occur

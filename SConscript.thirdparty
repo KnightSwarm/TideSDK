@@ -2,6 +2,22 @@
 
 # This file has been modified from its orginal sources.
 #
+# Copyright (c) 2013 Knightswarm Handelsbolag
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# This file has been modified from its orginal sources.
+#
 # Copyright (c) 2012 Software in the Public Interest Inc (SPI)
 # Copyright (c) 2012 David Pratt
 # 
@@ -54,7 +70,7 @@ if build.is_win32():
     arch_name = '%s-%s-v%s' % ("win", build.arch, revisions[build.os+'-'+build.arch])
 thirdparty_name = 'thirdparty-%s' % (arch_name)
 
-url = 'http://tidesdk.multipart.net/thirdparty/tide-%s.tgz' % (arch_name)
+url = 'http://doesnotexistyet.knightswarm.com/thirdparty/tide-%s.tgz' % (arch_name)#'http://tidesdk.multipart.net/thirdparty/tide-%s.tgz' % (arch_name)
 
 build.third_party = path.join(build.cwd(), thirdparty_name)
 rtdir = build.runtime_build_dir

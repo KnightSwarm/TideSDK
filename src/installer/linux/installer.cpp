@@ -1,6 +1,23 @@
 /**
 * This file has been modified from its orginal sources.
 *
+* Copyright (c) 2013 Knightswarm Handelsbolag
+* 
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+***
+* This file has been modified from its orginal sources.
+*
 * Copyright (c) 2012 Software in the Public Interest Inc (SPI)
 * Copyright (c) 2012 David Pratt
 * 
@@ -40,6 +57,8 @@
 #include <sstream>
 #include <unistd.h>
 #include <sys/types.h>
+#include <gtk/gtk.h>
+#include <gtk-3.0/gdk/gdk.h>
 
 #define LICENSE_WINDOW_WIDTH 600
 #define LICENSE_WINDOW_HEIGHT 500
@@ -156,11 +175,11 @@ Installer::Installer(vector<Job*> jobs, int installType) :
         this->StartDownloading();
     }
 
-    gdk_threads_enter();
+    //gdk_threads_enter();
     int timer = g_timeout_add(100, watcher, this);
     gtk_main();
     g_source_remove(timer);
-    gdk_threads_leave();
+    //gdk_threads_leave();
 }
 
 void Installer::Finish()
@@ -210,7 +229,7 @@ void Installer::ResizeWindow(int width, int height)
 void Installer::CreateInfoBox(GtkWidget* vbox)
 {
     // Create the top part with the application icon and information
-    GtkWidget* infoVbox = gtk_vbox_new(FALSE, 2);
+    GtkWidget* infoVbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
 
     string nameLabelText = "<span size=\"xx-large\">";
     nameLabelText.append(this->app->name);
@@ -247,14 +266,14 @@ void Installer::CreateInfoBox(GtkWidget* vbox)
     // Commenting icon as we dont have new icon created in code yet.
     // TODO: add new icon and uncomment below code
     //GtkWidget* icon = this->GetApplicationIcon();
-    GtkWidget* infoBox = gtk_hbox_new(FALSE, 5);
+    GtkWidget* infoBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_container_set_border_width(GTK_CONTAINER(infoBox), 5);
     //gtk_box_pack_start(GTK_BOX(infoBox), icon, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(infoBox), infoVbox, FALSE, FALSE, 0);
 
     gtk_box_pack_start(GTK_BOX(vbox), infoBox, FALSE, FALSE, 0);
 
-    GtkWidget* hseparator = gtk_hseparator_new();
+    GtkWidget* hseparator = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
     gtk_box_pack_start(GTK_BOX(vbox), hseparator, FALSE, FALSE, 5);
 }
 
@@ -273,7 +292,7 @@ void Installer::CreateIntroView()
         height = LICENSE_WINDOW_HEIGHT;
     }
 
-    GtkWidget* windowVbox = gtk_vbox_new(FALSE, 0);
+    GtkWidget* windowVbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     this->CreateInfoBox(windowVbox);
 
     // Create the part with the license
@@ -292,15 +311,15 @@ void Installer::CreateIntroView()
         gtk_scrolled_window_set_policy (
             GTK_SCROLLED_WINDOW(scroller),
             GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-        gtk_scrolled_window_add_with_viewport(
-            GTK_SCROLLED_WINDOW(scroller), licenseTextView);
+        gtk_container_add(
+            GTK_CONTAINER(scroller), licenseTextView);
         gtk_container_set_border_width(GTK_CONTAINER(scroller), 5);
 
         gtk_container_set_border_width(GTK_CONTAINER(licenseFrame), 5);
         gtk_container_add(GTK_CONTAINER(licenseFrame), scroller);
         gtk_box_pack_start(GTK_BOX(windowVbox), licenseFrame, TRUE, TRUE, 0);
 
-        GtkWidget* hseperator = gtk_hseparator_new();
+        GtkWidget* hseperator = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
         gtk_box_pack_start(GTK_BOX(windowVbox), hseperator, FALSE, FALSE, 5);
     }
 
@@ -342,7 +361,7 @@ void Installer::CreateIntroView()
         gtk_widget_set_size_request(installCombo, width - 5, -1);
 
         /* Pack label and combobox into vbox */
-        GtkWidget* installTypeBox = gtk_vbox_new(FALSE, 0);
+        GtkWidget* installTypeBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
         gtk_container_set_border_width(GTK_CONTAINER(installTypeBox), 5);
         gtk_box_pack_start(GTK_BOX(installTypeBox), label, FALSE, FALSE, 0);
         gtk_box_pack_start(GTK_BOX(installTypeBox), installCombo, FALSE, FALSE, 10);
@@ -355,7 +374,7 @@ void Installer::CreateIntroView()
     }
 
     // Add the security warning
-    GtkWidget* securityBox = gtk_hbox_new(FALSE, 0);
+    GtkWidget* securityBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     GtkWidget* securityImage = gtk_image_new_from_stock(
         GTK_STOCK_DIALOG_WARNING,
         GTK_ICON_SIZE_LARGE_TOOLBAR);
@@ -385,9 +404,9 @@ void Installer::CreateIntroView()
         GTK_STOCK_OK,
         GTK_ICON_SIZE_BUTTON);
     gtk_button_set_image(GTK_BUTTON(install), install_icon);
-    GtkWidget* buttonBox = gtk_hbutton_box_new();
+    GtkWidget* buttonBox = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
     gtk_container_set_border_width(GTK_CONTAINER(buttonBox), 5);
-    gtk_button_box_set_spacing(GTK_BUTTON_BOX(buttonBox), 5);
+    gtk_box_set_spacing(GTK_BOX(buttonBox), 5);
     gtk_button_box_set_layout(GTK_BUTTON_BOX(buttonBox), GTK_BUTTONBOX_END);
     gtk_box_pack_start(GTK_BOX(buttonBox), cancel, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(buttonBox), install, FALSE, FALSE, 0);
@@ -422,7 +441,7 @@ void Installer::CreateProgressView()
     }
     gtk_container_set_border_width(GTK_CONTAINER(this->window), 5);
 
-    GtkWidget* vbox = gtk_vbox_new(FALSE, 5);
+    GtkWidget* vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
     this->CreateInfoBox(vbox);
 
     this->downloadingLabel = gtk_label_new("Downloading packages...");
@@ -431,7 +450,7 @@ void Installer::CreateProgressView()
     this->progressBar = gtk_progress_bar_new();
     gtk_box_pack_start(GTK_BOX(vbox), this->progressBar, FALSE, FALSE, 0);
 
-    GtkWidget* hbox2 = gtk_hbox_new(FALSE, 0);
+    GtkWidget* hbox2 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     GtkWidget* cancel_but = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
     gtk_box_pack_start(GTK_BOX(hbox2), cancel_but, TRUE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(vbox), hbox2, FALSE, FALSE, 5);
@@ -450,15 +469,9 @@ void Installer::CreateProgressView()
 
 GtkWidget* Installer::GetIcon()
 {
-    GdkColormap* colormap = gtk_widget_get_colormap(this->window);
-    GdkBitmap *mask = NULL;
-    GdkPixmap* pixmap = gdk_pixmap_colormap_create_from_xpm_d(
-        NULL,
-        colormap,
-        &mask,
-        NULL,
-        (gchar**) tide_xpm);
-    return gtk_image_new_from_pixmap(pixmap, mask);
+    //GdkVisual* visual = gtk_widget_get_visual(this->window);
+    GdkPixbuf* pixbuf = gdk_pixbuf_new_from_xpm_data((const char**) tide_xpm);
+    return gtk_image_new_from_pixbuf(pixbuf);
 
 }
 

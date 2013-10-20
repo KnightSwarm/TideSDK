@@ -2,22 +2,6 @@
 
 # This file has been modified from its orginal sources.
 #
-# Copyright (c) 2013 Knightswarm Handelsbolag
-# 
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#   http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# This file has been modified from its orginal sources.
-#
 # Copyright (c) 2012 Software in the Public Interest Inc (SPI)
 # Copyright (c) 2012 David Pratt
 # 
@@ -67,7 +51,7 @@ if build.is_linux():
     sources = sources + Glob('gtk/*.cpp')
     build.add_thirdparty(env, 'libsoup')
     env.Append(LIBS=['Xss'])
-    env.ParseConfig('PKG_CONFIG_PATH=${PKG_CONFIG_PATH} pkg-config --cflags --libs libnotify gtk+-3.0 gdk-3.0 x11 xext')
+    env.ParseConfig('PKG_CONFIG_PATH=${PKG_CONFIG_PATH} pkg-config --cflags --libs libnotify gtk+-2.0 gdk-2.0 x11 xext')
 
 elif build.is_win32():
     build.add_thirdparty(env, 'cairo')

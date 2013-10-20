@@ -2,22 +2,6 @@
 
 # This file has been modified from its orginal sources.
 #
-# Copyright (c) 2013 Knightswarm Handelsbolag
-# 
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#   http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# This file has been modified from its orginal sources.
-#
 # Copyright (c) 2012 Software in the Public Interest Inc (SPI)
 # Copyright (c) 2012 David Pratt
 # Copyright (c) 2012 Mital Vora
@@ -72,7 +56,7 @@ if build.is_osx():
 if build.is_linux():
     sources += Glob('*_linux.cpp')
     Env.Append(LIBS=['dl'])
-    Env.ParseConfig('pkg-config --cflags --libs gtk+-3.0 gdk-3.0')
+    Env.ParseConfig('pkg-config --cflags --libs gtk+-2.0 gdk-2.0')
 
 if build.is_win32():
     sources += Glob('*_win32.cpp') + [Env.RES('support/winboot.rc')]

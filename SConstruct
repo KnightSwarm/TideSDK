@@ -90,7 +90,9 @@ if debug:
         build.env.Append(CCFLAGS=['/Z7'])  # max debug
         build.env.Append(CPPDEFINES=('WIN32_CONSOLE', 1))
     else:
-        build.env.Append(CPPFLAGS=['-g'])  # debug
+        build.env.Append(CPPFLAGS=['-g2'])  # debug
+        build.env.Append(CPPFLAGS=['-ggdb'])  # debug
+        build.env.Append(CPPFLAGS=['-O0'])  # debug
 else:
     build.env.Append(CPPDEFINES = ('NDEBUG', 1 ))
     if not build.is_win32():
